@@ -36,9 +36,26 @@ app.put('/courses/:id', (req, res)=>{
     catch(err){
         console.log(err);
     }
-    
+
 
 });
+
+
+app.delete('/courses/:id', (req, res)=>{
+    try{
+        let singleCourses = courses.find(c => c.id === parseInt(req.params.id));
+        if(!singleCourses){
+            return res.status(404).send('The course with the given ID was not found');
+        }
+        const index = courses.indexOf(singleCourses);
+        courses.splice(index, 1);
+        res.send(singleCourses);
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
 
 
 app.listen(port, ()=>{
