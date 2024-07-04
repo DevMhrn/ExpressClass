@@ -24,6 +24,22 @@ app.post('/courses', (req, res)=>{
     res.send(courses);
 });
 
+app.put('/courses/:id', (req, res)=>{
+    try{
+        let singleCourses = courses.find(c => c.id === parseInt(req.params.id));
+        if(!singleCourses){
+            return res.status(404).send('The course with the given ID was not found');
+        }
+        singleCourses.name = req.body.name;
+        res.send(singleCourses);
+    }
+    catch(err){
+        console.log(err);
+    }
+    
+
+});
+
 
 app.listen(port, ()=>{
     console.log(`Server is Listening {http://localhost:${port}} `)
