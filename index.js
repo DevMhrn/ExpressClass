@@ -3,6 +3,8 @@ const app = express();
 const port = 3002;
 
 app.use(express.json());
+app.use(middleware);
+app.use(logger);
 
 let courses=[
     {id:1, name:'course1'},
@@ -56,6 +58,16 @@ app.delete('/courses/:id', (req, res)=>{
     }
 });
 
+function middleware(req, res, next){
+    console.log('Middleware is working');
+    next();
+
+}
+function logger(req, res, next){
+    console.log('Logging...');
+    console.log(req.method,req.ip, req.hostname,  req.url, new Date()   );
+    next();
+}
 
 
 app.listen(port, ()=>{
