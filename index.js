@@ -1,73 +1,60 @@
 const express = require('express');
 const app = express();
-const port = 3002;
+const port = 8081;
+
+
+const mongoose = require('mongoose');
+mongoose.connect("mongodb+srv://debashismaharana7854:mcl4CHzLPNg0cZZQ@cluster0.fczkbhx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+.then(()=>console.log("Connected to MongoDB"))
+.catch(err=>console.error("Could not connect to MongoDB", err));
+
+
 
 app.use(express.json());
-app.use(middleware);
-app.use(logger);
 
-let courses=[
-    {id:1, name:'course1'},
-    {id:2, name:'course2'},
-    {id:3, name:'course3'}
-];
 
-app.get('/courses', (req, res)=>{
-    res.json(courses);
+const productSchema = new mongoose.Schema({
+    product_name: 
+    {
+        type:String,
+        required:true
+    },
+    product_price:
+    {
+        type:Number,
+        required:true
+    },
+    isInStock:
+    {
+        type:Boolean,
+        required:true
+    }, 
+    category:
+    {
+        type:String,
+        required:true
+    }   
+
+
+    
+      
 });
 
-app.post('/courses', (req, res)=>{
-    console.log(req.body);
-    const course = {
-       id: courses.length + 1,
-        name: req.body.name
-    };
-    courses.push(course);
-    res.send(courses);
+const ProductModel = mongoose.model('Product', productSchema);
+
+
+
+//create a new product
+app.post('/products', async (req, res)=>{
+    const product = ProductModel.create({
+        product_name: req.body.product_name,
+        product_price: req.body.product_price,
+        isInStock: req.body.isInStock,
+        category: req.body.category
+    });
+    console.log(product);
+    return res.status(201).json({message:"Product Created"});
 });
-
-app.put('/courses/:id', (req, res)=>{
-    try{
-        let singleCourses = courses.find(c => c.id === parseInt(req.params.id));
-        if(!singleCourses){
-            return res.status(404).send('The course with the given ID was not found');
-        }
-        singleCourses.name = req.body.name;
-        res.send(singleCourses);
-    }
-    catch(err){
-        console.log(err);
-    }
-
-
-});
-
-
-app.delete('/courses/:id', (req, res)=>{
-    try{
-        let singleCourses = courses.find(c => c.id === parseInt(req.params.id));
-        if(!singleCourses){
-            return res.status(404).send('The course with the given ID was not found');
-        }
-        const index = courses.indexOf(singleCourses);
-        courses.splice(index, 1);
-        res.send(singleCourses);
-    }
-    catch(err){
-        console.log(err);
-    }
-});
-
-function middleware(req, res, next){
-    console.log('Middleware is working');
-    next();
-
-}
-function logger(req, res, next){
-    console.log('Logging...');
-    console.log(req.method,req.ip, req.hostname,  req.url, new Date()   );
-    next();
-}
 
 
 app.listen(port, ()=>{
