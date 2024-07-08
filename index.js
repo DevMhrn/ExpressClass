@@ -97,6 +97,16 @@ app.patch('/products/:id', async (req, res)=>{
 });
 
 
+//delete the product
+app.delete('/products/:id', async (req, res) => {
+    const product = await ProductModel.findByIdAndDelete(req.params.id);
+    if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+    }
+    return res.status(200).json(product);
+});
+
+
 
 
 
