@@ -70,6 +70,21 @@ app.get('/products/:id', async (req, res)=>{
 });
 
 
+//update the product 
+app.put('/products/:id', async (req, res)=>{
+    const product = await ProductModel.findByIdAndUpdate(req.params.id, {
+        product_name: req.body.product_name,
+        product_price: req.body.product_price,
+        isInStock: req.body.isInStock,
+        category: req.body.category
+    }, {new:true});
+    if(!product){
+        return res.status(404).json({message:"Product not found"});
+    }
+    return res.status(200).json(product);
+});
+
+
 
 app.listen(port, ()=>{
     console.log(`Server is Listening {http://localhost:${port}} `)
