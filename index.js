@@ -85,6 +85,20 @@ app.put('/products/:id', async (req, res)=>{
 });
 
 
+//patch the product
+app.patch('/products/:id', async (req, res)=>{
+    const product = await ProductModel.findByIdAndUpdate(req.params.id, {
+        isInStock: req.body.isInStock
+    }, {new:true});
+    if(!product){
+        return res.status(404).json({message:"Product not found"});
+    }
+    return res.status(200).json(product);
+});
+
+
+
+
 
 app.listen(port, ()=>{
     console.log(`Server is Listening {http://localhost:${port}} `)
