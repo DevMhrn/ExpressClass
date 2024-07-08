@@ -4,6 +4,7 @@ app.use(express.json());
 const port = 8081;
 require('dotenv').config();
 const productRoutes = require('./src/routes/productRoute');
+const userRoutes = require('./src/routes/userRoute');
 
 
 const mongoose = require('mongoose');
@@ -12,6 +13,9 @@ mongoose.connect(process.env.MONGO_URL)
 .catch(err=>console.error("Could not connect to MongoDB", err));
 
 app.use('/api', productRoutes);
+app.use('/api', userRoutes);
+
+
 
 
 
