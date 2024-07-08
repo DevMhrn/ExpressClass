@@ -56,6 +56,11 @@ app.post('/products', async (req, res)=>{
     return res.status(201).json({message:"Product Created"});
 });
 
+app.get('/products', async (req, res)=>{
+    const products = await ProductModel.find({isInStock:true});
+    return res.status(200).json(products);  
+});
+
 
 app.listen(port, ()=>{
     console.log(`Server is Listening {http://localhost:${port}} `)
