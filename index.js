@@ -61,6 +61,15 @@ app.get('/products', async (req, res)=>{
     return res.status(200).json(products);  
 });
 
+app.get('/products/:id', async (req, res)=>{
+    const product = await ProductModel.findById(req.params.id);
+    if(!product){
+        return res.status(404).json({message:"Product not found"});
+    }
+    return res.status(200).json(product);
+});
+
+
 
 app.listen(port, ()=>{
     console.log(`Server is Listening {http://localhost:${port}} `)
